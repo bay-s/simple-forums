@@ -22,6 +22,8 @@ testSubmit = e => {
     e.preventDefault()
     console.log("TEST SUBMIT");
 }
+
+
     render(){
 
         const styles = {
@@ -34,7 +36,7 @@ testSubmit = e => {
                     <div className='forms left'>
                     <div className='judul-flex'>
                     <h3 className='form-judul'>Login</h3>
-                    <i class="fa fa-long-arrow-right rights" aria-hidden="true" onClick={this.  nextSlide}></i>
+                    <i class="fa fa-long-arrow-right rights" aria-hidden="true" onClick={this.nextSlide}></i>
                     </div>
                     <form className='form-grup left' onSubmit={this.props.login}>
                  <label>
@@ -56,7 +58,7 @@ testSubmit = e => {
                     <div className='forms right' style={styles}>
                     <div className='judul-flex'>
                     <h3 className='form-judul'>Register</h3>
-                    <i class="fa fa-long-arrow-left lefts" aria-hidden="true" onClick={this.  prevSlide}></i>
+                    <i class="fa fa-long-arrow-left lefts" aria-hidden="true" onClick={this.prevSlide}></i>
                     </div>
                         <form className='form-grup right' onSubmit={this.props.registerAkun}>
                         <label>
@@ -75,13 +77,13 @@ testSubmit = e => {
                         Password
                      <input type='password' name='password' onChange={this.props.Change}/>
                      </label>
-                    <button type='submit' className='hvr-sweep-to-right'>Register</button>
+                    {this.props.load ? <button className='hvr-sweep-to-right' type="button" disabled>Register</button> : <button type='submit' className='hvr-sweep-to-right'>Register</button>}
                         </form>
                     </div>
                 </div>
             </div>
         )
-    }
+    } 
 }
 
 export default Home;

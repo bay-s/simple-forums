@@ -4,7 +4,7 @@ import img from '../akun.jpg'
 import {database,auth} from '../firebase';
 import { collection, getDocs,query, where,doc, deleteDoc,updateDoc,arrayUnion,arrayRemove} from 'firebase/firestore';
 
-class FollowerCard extends React.Component{
+class FollowingCard extends React.Component{
 constructor(){
     super()
     this.state = {
@@ -30,20 +30,21 @@ async componentDidMount(){
     render(){
 
         return(
-            <div className='follower-container'>
-             <div className='post-info'>
-                 <div className='image-wrap'>
-                 <Link to={`/account/${this.state.follower.uid}`}>
-                 <img src={this.state.follower.images != null ? this.state.follower.images : img} />
-                 </Link>
-                 </div>
-                 <div className='post-user'>
-                     <h4 className='username'><Link to={`/account/${this.state.follower.uid}`}>{this.state.follower.username}</Link></h4>
-                 </div>
-             </div>
-            </div>
+       this.props.follow_id == null ? "kosong" : <div className='follower-container'>
+       <div className='post-info'>
+           <div className='image-wrap'>
+           <Link to={`/account/${this.state.follower.uid}`}>
+           <img src={this.state.follower.images != null ? this.state.follower.images : img} />
+           </Link>
+           </div>
+           <div className='post-user'>
+               <h4 className='username'><Link to={`/account/${this.state.follower.uid}`}>{this.state.follower.username}</Link></h4>
+           </div>
+       </div>
+       </div>
              )
     }
 }
 
-export default FollowerCard;
+export default FollowingCard;
+

@@ -68,7 +68,7 @@ class PostDetailCard extends React.Component{
       await getDocsFromCache(q2).then(res => {
         res.docs.map(item => {
         const data = item.data()
-        console.log(data);
+
     return this.setState({getAvatar:this.state.getAvatar = data.images})
           });
         })
@@ -99,7 +99,6 @@ class PostDetailCard extends React.Component{
       getDocsFromCache(q2).then(res => {
         res.docs.map(item => {
         const data = item.data()
-        console.log(data);
     return this.setState({getAvatar:this.state.getAvatar = data.images})
           });
         })

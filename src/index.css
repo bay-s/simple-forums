@@ -648,10 +648,16 @@ border: 1px solid rgba(127, 90, 131, 0.3);
 font-size: 20px;
 }
 
+.profile-info .image-wrap img{
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
 
-
-.profile-info .delete{
+.delete{
   color: red;
+  cursor: pointer;
 }
 .user-name-wrapper{
   display: flex;
@@ -687,6 +693,13 @@ box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 backdrop-filter: blur(5px);
 -webkit-backdrop-filter: blur(5px);
 border: 1px solid rgba(127, 90, 131, 0.3);
+}
+
+.user-post-info{
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .use-profile-container ul{
@@ -784,12 +797,18 @@ gap: 20px;
   text-overflow: ellipsis;
 }
 
+.post-title a{
+  word-wrap: break-word;
+  text-overflow: ellipsis;
+  word-break: break-all;
+}
+
 .post-info{
   display: flex;
   gap: 10px;
-  justify-content: space-between;
   align-items: center;
 }
+
 
 .post-card .post-info-inner{
   display: flex;
@@ -801,6 +820,11 @@ gap: 20px;
   width: 50px;
   height: 50px;
 }
+
+.post-info .image-wrap img{
+  border-radius: 50%;
+}
+
 .username{
   font-size: 14px;
 }
@@ -855,11 +879,7 @@ gap: 25px;
   gap: 20px;
 }
 
-.post-card .actions .fa{
-  color: white;
-  font-size: 25px;
-  cursor: pointer;
-}
+
 
 .card:hover {
   box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.4);

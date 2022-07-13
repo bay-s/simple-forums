@@ -8,6 +8,7 @@ import EditProfile from './edit-profile';
 import UserDetailCard from './user-detail';
 import UserPost from './user-post';
 import FollowerCard from './follower-card';
+import FollowingCard from './following-card';
 
 
 function AccountPage(props){
@@ -33,7 +34,7 @@ if (res.docs.length < 1) {
         <div className='banner'>
 
         </div>
-        {myId ?   <Navigate to="*" replace={true} /> : id === props.id ? <UserProfileCard id={id} ID={ID} /> : <UserDetailCard id={id} avatar={props.avatar} user_name={props.user_name}/> }
+        {myId ?   <Navigate to="*" replace={true} /> : id === props.id ? <UserProfileCard id={id} ID={ID} isLogin={props.isLogin} /> : <UserDetailCard id={id} ID={ID} isLogin={props.isLogin} avatar={props.avatar} user_name={props.user_name} /> }
     
     </div>
     {/* END USER PROFILE */}
@@ -88,10 +89,10 @@ class UserProfileCard extends React.Component{
               await getDocs(queryFollow).then(res => {
                 res.docs.map(item => {
                   const data = item.data()
-                    return this.setState({ 
-                      follower:this.state.follower = data.follower,
-                      following:this.state.following = data.following
-                    })  
+                  this.setState({
+                    follower:this.state.follower = data.follower,
+                    following:this.state.following = data.following
+                  })
                     });
                   })
             
@@ -166,17 +167,22 @@ deleteUser(user).then(() => {
     const id = e.target.dataset.name;
     this.setState({option:this.state.option = id})
   }
+
+
     render(){
 
         const postCard = Array.isArray(this.state.dataPost.docs) ? this.state.dataPost.docs.map((post,index)=> {
             const posts = post.data()
-
-            return <UserPost data={posts}/>
+            return <UserPost data={posts} isLogin={this.props.isLogin} id={this.props.ID}/>
             }) : ""
 
         const followCard = this.state.follower != null ? this.state.follower.map(data => {
-         return <FollowerCard data={data}/>
+         return <FollowerCard follow_id={data} user_id={this.props.id }/>
         }) : ""
+
+        const followingCard = this.state.following != null ? this.state.following.map(data => {
+          return <FollowingCard follow_id={data} user_id={this.props.id }/>
+         }) : ""
         return(
             <div className='profile-container'>
             <div className='user-info'>
@@ -207,7 +213,7 @@ deleteUser(user).then(() => {
                         </ul>
                 </div>
                 <div className='latest-post'>
-               { this.state.option === 'POST' ? postCard : followCard}
+               { this.state.option === 'POST' ? postCard : this.state.option === 'FOLLOWER' ? followCard : followingCard }
                 </div>
 <div className={this.state.modal ? 'modals' : "modal-container"}>
 {this.state.modal ? <EditProfile id={this.props.id} ID={this.props.ID} data={this.state.data} removeModal={this.removeModal} avatar={this.state.data.images}/>  : ""}

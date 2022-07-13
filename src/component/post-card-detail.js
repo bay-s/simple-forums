@@ -3,7 +3,7 @@ import logo from '../default.jpg'
 import img from '../akun.jpg'
 import { Link } from 'react-router-dom'
 import {database} from '../firebase';
-import { collection, getDocs,query, where,doc,updateDoc,addDoc,deleteDoc, arrayUnion,serverTimestamp} from 'firebase/firestore';
+import { collection, getDocs,query, where,doc,updateDoc,addDoc,arrayUnion,serverTimestamp} from 'firebase/firestore';
 
 
 
@@ -15,7 +15,8 @@ constructor(){
     month:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Okt','Nov','Dec'],
     uniqId:'',
     total:null,
-    token:''
+    token:'',
+    likes_id:[]
     }
 }
 
@@ -51,7 +52,20 @@ return this.setState({
       });
     })
  
+   
 
+
+    const likes = collection(database,'post_likes')
+    const queryUser = query(likes ,where("likes_post_id","==" ,this.props.data.post_id))
+                 // GET USER LIKES
+     
+                  await getDocs(queryUser).then(res => {
+                    res.docs.map(item => {
+                      const data = item.data()
+                      console.log(data);
+                        this.setState({likes_id:this.state.likes_id = data.user_likes_id})
+                        });
+                      })
 }
 
 async componentDidUpdate(){
@@ -99,46 +113,32 @@ likesPost = (e) => {
   const id = this.props.data.post_id
   const is_likes = localStorage.getItem(id)
   const username = this.props.data.username
+  const ranID = Math.random().toString(36).substring(2,36);
   const docUpdate = doc(database,'post',id ) 
+  const docUpdates = doc(database,'post_likes',id) 
   if(e.target.dataset.id === id){
+    updateDoc(docUpdates,{user_likes_id:arrayUnion(this.props.user_id)})
+    .then(() =>{
+      alert("add likes sukses")
+      this.likesNotif(id)
+    })
+    .catch(err => {console.log(err);}) 
     if(!e.target.classList.contains('likes')){
-            localStorage.setItem(id,id)
-            updateDoc(docUpdate,{
-              total_likes:this.state.total + 1
-                })
-                .then(() =>{
-                  alert("add likes sukses")
-                  this.likesNotif(id)
-                })
-                .catch(err => {console.log(err);}) 
+            // updateDoc(docUpdate,{total_likes:this.state.total + 1})
+
         }
         else{
-          localStorage.removeItem(id, id);
-          updateDoc(docUpdate, {
-            total_likes: this.state.total - 1
-          })
-            .then(() => {alert("remove likes sukses")})
-            .catch((err) => {console.log(err)}); 
+          // localStorage.removeItem(id, id);
+          // updateDoc(docUpdate, {
+          //   total_likes: this.state.total - 1
+          // })
+          //   .then(() => {alert("remove likes sukses")})
+          //   .catch((err) => {console.log(err)}); 
         }
     }
  
 }
 
-deletePost = (e) => {
-  const id = e.target.dataset.id
-  const docDelete = doc(database,'post',id )
-    if(confirm("Are you sure want to delete this post")){
-      deleteDoc( docDelete)
-      .then(() =>{
-        alert("delete sukses")
-      })
-      .catch(err => {
-        console.log(err.message);
-      })
-    }else{
-
-    }
-  }
 
 render(){
 const  timestamp = this.props.data.timestamp.seconds
@@ -146,8 +146,16 @@ const time = new Date(timestamp*1000)
 const date = `${time.getDate()} ${this.state.month[time.getMonth()]} ${time.getFullYear()}`
 
 const post_content = this.props.data.post_content.match(/.{1,250}/g)
-const is_likes = localStorage.getItem( this.props.data.post_id)
+const is_likes = localStorage.getItem(this.props.user_name)
 
+const likes_id = this.state.likes_id.length < 1 ? "" : this.state.likes_id.map(id => {
+  if(id ===  this.props.data.user_post_id){
+    return <i className="fa fa-heart likes"  data-id={this.props.data.post_id} onClick={this.likesPost }></i>
+  }else{
+    return <i className="fa fa-heart"  data-id={this.props.data.post_id} onClick={this.likesPost }></i>
+  }
+
+})
 
     return(
         <div class="post-card">
@@ -174,7 +182,7 @@ return <p className='post-text'>{text}</p>
 </div>
 <div className="action">
 <span className='total-like'>{this.props.data.total_likes} Likes</span>
-<i className={is_likes ===  this.props.data.post_id ? "fa fa-heart likes" :  "fa fa-heart" } aria-hidden="true"  data-id={this.props.data.post_id} onClick={this.likesPost }></i>
+{likes_id}
 <i class="fa fa-thumbs-down" aria-hidden="true"></i>
 
 </div>

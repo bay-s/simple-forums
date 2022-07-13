@@ -15,6 +15,7 @@ import PostPage from './component/post';
 import ModalPost from './component/modal-post';
 import PostDetail from './component/post-detail';
 import PostCategory from './component/post-category';
+import PrivateMessage from './component/private-message';
 
 
 
@@ -24,7 +25,7 @@ class App extends React.Component{
     constructor(){
         super()
         this.state = {
-        data:collection(database,'user'),
+        load:false,
         password:'',
         email:'',
         fullname:'',
@@ -55,7 +56,6 @@ class App extends React.Component{
               const uid = user.uid;
               const q = query(db,where("uid","==" , uid))
               // GET USER LOGIN
-  
            await getDocs(q).then(res => {
                 res.docs.map(item => {
                 const data = item.data()
@@ -87,7 +87,7 @@ this.setState({notif:this.state.notif = data.notif})
              console.log('user log in');
             } else {
               // User is signed out
-              localStorage.clear();
+    
               this.setState({isLogin:this.state.isLogin = false})
               console.log("user log out");
             }
@@ -117,8 +117,9 @@ this.setState({notif:this.state.notif = data.notif})
       
   
         
-  userFollowerInfo = (notif ,ID) => {
-
+userNotif = (ID) => {
+const notif = collection(database,'notifikasi')
+console.log(ID);
 setDoc(doc(notif,ID), {
       notif_id:this.state.email,
       notif_likes:[],
@@ -127,19 +128,24 @@ setDoc(doc(notif,ID), {
       notif_following:[],
       notif_follower:[],
    })      
-setDoc(doc(ID), {
+  .then(() => {console.log('sukses');})  
+  .catch((err) => {alert(`something wrong ${err}`)})
+  }
+
+ setFollowers = (ID) => {
+  console.log(ID);
+  const user_followers = collection(database,'user_follower')
+setDoc(doc(user_followers ,ID), {
   follower:[],
   following:[],
   uid:ID
     })
-    .then(() => {console.log('sukses');})  
+  .then(() => {console.log('sukses');})  
   .catch((err) => {alert(`something wrong ${err}`)})
-  }
+ }
 
   registerAkun = (e) => {
-
-        const notif = collection(database,'notifikasi')
-        this.setState({hide:this.state.hide = false})  
+    this.setState({load:this.state.load = true})  
         createUserWithEmailAndPassword(secondAuth ,this.state.email,this.state.password)
         .then((userCredential) => {
           // Signed in 
@@ -149,8 +155,8 @@ setDoc(doc(ID), {
             errorMessage:"Register sukses",
             sukses:true
           })
-        const db = this.state.data
-      this.userFollowerInfo()       
+      const db = collection(database,'user')    
+console.log(ID);
       setDoc(doc(db,user.uid), {
           username: this.state.username,
           email:this.state.email,
@@ -158,21 +164,21 @@ setDoc(doc(ID), {
           uid:user.uid,
           images:'',
           private_message:[],
-          total_follow:0,
+          total_following:0,
           total_follower:0,
           total_post:0,
         })
         .then(() => {
         this.setState({
-        error:this.state.error = false,
-        errorMessage:"Register sukses",
-        hide:this.state.hide = true
+      errorMessage:"Register sukses",
+       load:this.state.load = false
       })
+      this.setFollowers(ID)
+      this.userNotif(ID)
       alert("REGISTER SUKSES")
         })  
       .catch((err) => {alert(`something wrong ${err}`)})
-      
-        })
+    })
         .catch((error) => {
           const errorCode = error.code;
           const errorMsg = error.message;
@@ -195,6 +201,7 @@ setDoc(doc(ID), {
         .catch((error) => {
           const errorCode = error.code;
           const errorMsg = error.message;
+          console.log(errorMsg);
           this.setState({
             pesan:this.state.pesan = errorMsg,
             error:this.state.error = true
@@ -223,7 +230,7 @@ registerValidasi = e => {
   e.preventDefault()
 
 if(this.state.username.indexOf(' ') >= 0){
-  alert("username cannot be whitespace");
+  alert("username cannot contain whitespace");
 }
 else if (this.state.username.length < 8) {
   alert("Username atleast 8 character")
@@ -236,6 +243,7 @@ alert("Email atleast 12 character")
 }
 else{
 this.registerAkun() 
+console.log("tes");
 }
 }
 
@@ -256,14 +264,17 @@ this.akunLogin()
 <Router>
               <Header id={this.state.uid} createPost={this.createPost} logout={this.logout } isLogin={this.state.isLogin}   notif={this.state.notif}/>
     <Routes>
-          <Route path="/" element={this.state.isLogin ? <PostPage id={this.state.uid} isLogin={this.state.isLogin}/> : <Home login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} Change={this.handlerChange}/> }exact/>
+          <Route path="/" element={this.state.isLogin ? <PostPage id={this.state.uid} isLogin={this.state.isLogin}/> : <Home load={this.state.load} login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} Change={this.handlerChange}/> }exact/>
 
-          <Route path="/account/:id" element={this.state.isLogin ? <AccountPage id={this.state.uid} isLogin={this.state.isLogin} user_name={this.state.akunUserName} avatar={this.state.akunImages}/>  : <Home login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} Change={this.handlerChange}/> }/>
+          <Route path="/account/:id" element={this.state.isLogin ? <AccountPage id={this.state.uid} isLogin={this.state.isLogin} user_name={this.state.akunUserName} avatar={this.state.akunImages}/>  : <Home load={this.state.load} login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} Change={this.handlerChange}/> }/>
 
-          <Route path="/post-detail/:id" element={this.state.isLogin ? <PostDetail  ID={this.state.uid} avatar={this.state.akunImages} name={this.state.akunUserName} id={this.state.uid} isLogin={this.state.isLogin}/> : <Home login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} Change={this.handlerChange}/> }/>
+          <Route path="/post-detail/:id" element={this.state.isLogin ? <PostDetail  ID={this.state.uid} avatar={this.state.akunImages} name={this.state.akunUserName} id={this.state.uid} isLogin={this.state.isLogin}/> : <Home load={this.state.load} login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} Change={this.handlerChange}/> }/>
 
-          <Route path="/category/:id" element={this.state.isLogin ? <PostCategory ID={this.state.uid} avatar={this.state.akunImages} name={this.state.akunUserName}/>  : <Home login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} Change={this.handlerChange}/> }/>
+          <Route path="/category/:id" element={this.state.isLogin ? <PostCategory ID={this.state.uid} avatar={this.state.akunImages} name={this.state.akunUserName}/>  : <Home load={this.state.load} login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} Change={this.handlerChange}/> }/>
           
+          <Route path="/message/:id" element={this.state.isLogin ? <PrivateMessage id={this.state.uid} user_name={this.state.akunUserName} avatar={this.state.akunImages} /> : <Home load={this.state.load} login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} Change={this.handlerChange}/> }/>
+          
+    
           <Route path='*' element={<NotFound />} />
 
       </Routes>
@@ -286,12 +297,3 @@ this.akunLogin()
 
 export default App;
 
-
-          // <Route path="/" element={this.state.isLogin ? <PostPage id={this.state.uid}/> : <Home login={this.akunLogin} avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} hide={this.state.hide} pesan={this.state.pesan} registerAkun={this.registerValidasi} Change={this.handlerChange}/> }exact/>
-
-          // <Route path="/account/:id" element={this.state.isLogin ? <AccountPage id={this.state.uid} isLogin={this.state.isLogin}/> : <Home login={this.akunLogin} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} Change={this.handlerChange}/>}/>
-
-          // <Route path="/post-detail/:id" element={this.state.isLogin ? <PostDetail  ID={this.state.uid} avatar={this.state.akunImages} name={this.state.akunUserName}/> : <Home login={this.akunLogin} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} Change={this.handlerChange}/>}/>
-
-          // <Route path="/category/:id" element={this.state.isLogin ? <PostCategory ID={this.state.uid} avatar={this.state.akunImages} name={this.state.akunUserName}/> : <Home login={this.akunLogin} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} Change={this.handlerChange}/>}/>
-          // <Route path='*' element={<NotFound />} />

@@ -70,11 +70,26 @@ ImageChange = event => {
   //     })
   // }
   
+
+postLikes = (ranID) => {
+  const db = collection(database,'post_likes');
+
+  setDoc(doc(db,ranID),  {
+     user_likes_id:[],
+     likes_post_id:ranID
+    })
+    .then(() => {console.log("notif sukses")})  
+    .catch((err) => {
+      console.log(err);
+    })
+
+ 
+}
  uploadImage = () => {
 
   const id = this.props.id
   let total_post = this.props.Post
-  const ranID = (Math.random() + 1).toString(36).substring(1);
+  const ranID = Math.random().toString(36).substring(2,36);
   const username = this.props.name
 const db = collection(database,"post")
 const docUpdate = doc(database,'user',id)
@@ -110,7 +125,7 @@ if (this.state.title.length < 10) {
       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
         console.log('File available at', downloadURL);
         // this.setState({saveImage:!this.state.saveImage,});
-  
+        this.postLikes(ranID);
         updateDoc(docUpdate,{
           total_post:total_post + 1
         })
@@ -130,7 +145,6 @@ if (this.state.title.length < 10) {
       .then(() =>{
         alert("add post sukses")
         this.setState({hide:this.state.hide = true})
-        window.location.reload()
       })
       .catch(err => {
       alert(err.message)
