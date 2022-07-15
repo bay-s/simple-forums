@@ -15,11 +15,13 @@ function UserPost(props){
     
      function deletePost(e){
             const id = e.target.dataset.id
+            const user =  doc(database,'user',props.id )
             const docDelete = doc(database,'post',id )
             const docUpdate = doc(database,'user',props.id) 
  
               if(confirm("Are you sure want to delete this post")){
                 updateDoc(docUpdate,{total_likes: - 1})
+                updateDoc(user,{total_post: - 1})
                 deleteDoc( docDelete)
                 .then(() =>{
                   alert("delete sukses")

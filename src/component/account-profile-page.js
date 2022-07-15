@@ -67,6 +67,7 @@ class UserProfileCard extends React.Component{
         const q = query(db,where("uid","==" , id))
         const q2 = query(post,where("user_post_id","==" , id))
         const queryFollow = query(follower,where("uid","==" , id))
+        
         // GET USER LOGIN
      getDocs(q).then(res => {
           res.docs.map(item => {

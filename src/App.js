@@ -16,6 +16,7 @@ import ModalPost from './component/modal-post';
 import PostDetail from './component/post-detail';
 import PostCategory from './component/post-category';
 import PrivateMessage from './component/private-message';
+import SendMessage from './component/send-message';
 
 
 
@@ -144,6 +145,16 @@ setDoc(doc(user_followers ,ID), {
   .catch((err) => {alert(`something wrong ${err}`)})
  }
 
+ setPrivateMessage = (ID) => {
+  console.log(ID);
+  const user_message = collection(database,'private_message')
+setDoc(doc(user_message ,ID), {
+  messages:[],
+  uid:ID
+    })
+  .then(() => {console.log('sukses')})  
+  .catch((err) => {alert(`something wrong ${err}`)})
+ }
   registerAkun = (e) => {
     this.setState({load:this.state.load = true})  
         createUserWithEmailAndPassword(secondAuth ,this.state.email,this.state.password)
@@ -156,7 +167,6 @@ setDoc(doc(user_followers ,ID), {
             sukses:true
           })
       const db = collection(database,'user')    
-console.log(ID);
       setDoc(doc(db,user.uid), {
           username: this.state.username,
           email:this.state.email,
@@ -175,6 +185,7 @@ console.log(ID);
       })
       this.setFollowers(ID)
       this.userNotif(ID)
+      this.setPrivateMessage(ID)
       alert("REGISTER SUKSES")
         })  
       .catch((err) => {alert(`something wrong ${err}`)})
@@ -272,8 +283,9 @@ this.akunLogin()
 
           <Route path="/category/:id" element={this.state.isLogin ? <PostCategory ID={this.state.uid} avatar={this.state.akunImages} name={this.state.akunUserName}/>  : <Home load={this.state.load} login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} Change={this.handlerChange}/> }/>
           
-          <Route path="/message/:id" element={this.state.isLogin ? <PrivateMessage id={this.state.uid} user_name={this.state.akunUserName} avatar={this.state.akunImages} /> : <Home load={this.state.load} login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} Change={this.handlerChange}/> }/>
+          <Route path="/message/:id" element={this.state.isLogin ? <PrivateMessage ID={this.state.uid} user_name={this.state.akunUserName} avatar={this.state.akunImages} /> : <Home load={this.state.load} login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} Change={this.handlerChange}/> }/>
           
+          <Route path="/send-message/:id" element={<SendMessage ID={this.state.uid} user_name={this.state.akunUserName} avatar={this.state.akunImages} />}/>
     
           <Route path='*' element={<NotFound />} />
 

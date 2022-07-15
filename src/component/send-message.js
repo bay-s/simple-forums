@@ -6,7 +6,7 @@ import img from '../akun.jpg'
 import MessagesCard from './messages-card';
 
 
-function PrivateMessage(props){
+function SendMessage(props){
     const {id} = useParams();
     const ID = props.ID
 
@@ -16,7 +16,7 @@ function PrivateMessage(props){
 }
 
 
-export default PrivateMessage;
+export default SendMessage;
 
 
 class Message extends React.Component{
@@ -138,13 +138,27 @@ messageNotif = () => {
 
          const messasgeCard = this.state.messagesArr.length < 1 ? "" : this.state.messagesArr.map(msg => { return <MessagesCard msg={msg} />});
         return(
-        <div className='list-message'>
+        
+        <div className='message-container'>
 <header className='user-header'>
-<h4 className='username'>{this.state.messagesArr.length < 1 ? "0" : `${this.state.messagesArr.length} Messages`}</h4>
+<img src={this.state.avatar  != null ? this.state.avatar : img} />
+<h4 className='username'><Link to={`/account/${this.props.ID}`}>{this.state.username}</Link></h4>
              </header>
-            <div className='list-card'>
-                {messasgeCard}
+            <div className='private-message-container'>
+             {messasgeCard}
             </div>
+            <form className='private-message' onSubmit={this.sendMessages}>
+<div className='message-area'>
+<div className='upload-photoz'>
+ <label htmlFor="upload-photo" className='upload-photo'>
+ <i className="fa fa-file-image-o" aria-hidden="true"></i>
+ </label>
+ <input type="file" name="photos" id="upload-photo" onChange={this.ImageChange}/>
+ </div>
+<textarea name='messages' className='messages' onChange={this.handlerChange}></textarea>
+<button type='submit' className='hvr-sweep-to-right send-message'>Send</button>          
+</div>
+            </form>
         </div>
         )
     }

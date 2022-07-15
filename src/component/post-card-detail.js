@@ -3,7 +3,7 @@ import logo from '../default.jpg'
 import img from '../akun.jpg'
 import { Link } from 'react-router-dom'
 import {database} from '../firebase';
-import { collection, getDocs,query, where,doc,updateDoc,addDoc,arrayUnion,serverTimestamp} from 'firebase/firestore';
+import { collection, getDocs,query, where,doc,updateDoc,addDoc,arrayUnion,serverTimestamp, arrayRemove} from 'firebase/firestore';
 
 
 
@@ -85,11 +85,6 @@ return this.setState({getAvatar:this.state.getAvatar = data.images})
     this.setState({total:this.state.total = this.props.data.total_likes})
 }
 
-logout = () => {
-  setToken("")
-  window.localStorage.removeItem("token")
-}
-
 
 likesNotif = (id) => {
   const notif_id = this.props.data.user_post_id
@@ -117,23 +112,22 @@ likesPost = (e) => {
   const docUpdate = doc(database,'post',id ) 
   const docUpdates = doc(database,'post_likes',id) 
   if(e.target.dataset.id === id){
-    updateDoc(docUpdates,{user_likes_id:arrayUnion(this.props.user_id)})
-    .then(() =>{
-      alert("add likes sukses")
-      this.likesNotif(id)
-    })
-    .catch(err => {console.log(err);}) 
     if(!e.target.classList.contains('likes')){
-            // updateDoc(docUpdate,{total_likes:this.state.total + 1})
-
+      updateDoc(docUpdates,{user_likes_id:arrayUnion(this.props.user_id)})
+      this.likesNotif(id)
+      .then(() =>{
+        alert("add likes sukses")
+        this.likesNotif(id)
+      })
+      .catch(err => {console.log(err);}) 
         }
         else{
-          // localStorage.removeItem(id, id);
-          // updateDoc(docUpdate, {
-          //   total_likes: this.state.total - 1
-          // })
-          //   .then(() => {alert("remove likes sukses")})
-          //   .catch((err) => {console.log(err)}); 
+          updateDoc(docUpdates,{user_likes_id:arrayRemove(this.props.user_id)})
+          updateDoc(docUpdate, {
+            total_likes: this.state.total - 1
+          })
+            .then(() => {alert("remove likes sukses")})
+            .catch((err) => {console.log(err)}); 
         }
     }
  
@@ -146,10 +140,9 @@ const time = new Date(timestamp*1000)
 const date = `${time.getDate()} ${this.state.month[time.getMonth()]} ${time.getFullYear()}`
 
 const post_content = this.props.data.post_content.match(/.{1,250}/g)
-const is_likes = localStorage.getItem(this.props.user_name)
 
-const likes_id = this.state.likes_id.length < 1 ? "" : this.state.likes_id.map(id => {
-  if(id ===  this.props.data.user_post_id){
+const likes_id = this.state.likes_id.length < 1 ? <i className="fa fa-heart"  data-id={this.props.data.post_id} onClick={this.likesPost }></i> : this.state.likes_id.map(id => {
+  if(id ===  this.props.user_id){
     return <i className="fa fa-heart likes"  data-id={this.props.data.post_id} onClick={this.likesPost }></i>
   }else{
     return <i className="fa fa-heart"  data-id={this.props.data.post_id} onClick={this.likesPost }></i>

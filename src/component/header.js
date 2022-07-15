@@ -85,7 +85,7 @@ constructor(){
            <img src={user} onClick={this.dropDown}/>
            <ul className={this.props.isLogin ? "drop-list" : "hide"} ref={this.state.dropMenu}>
             <li><Link to={`/account/${this.props.id}`}>Profile</Link></li>
-            <li><Link to=''>Message</Link></li>
+            <li><Link to={`/message/${this.props.id}`}>Message</Link></li>
             <li><Link to='#' onClick={this.props.logout}>Log out</Link></li>
            </ul>
           </li>
