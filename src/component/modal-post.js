@@ -85,6 +85,7 @@ postLikes = (ranID) => {
 
  
 }
+
  uploadImage = () => {
 
   const id = this.props.id

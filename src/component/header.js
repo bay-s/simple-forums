@@ -82,7 +82,7 @@ constructor(){
           </div>
           </li>
           <li className="drop-down">
-           <img src={user} onClick={this.dropDown}/>
+           <img src={this.props.avatar != null ? this.props.avatar : user} onClick={this.dropDown}/>
            <ul className={this.props.isLogin ? "drop-list" : "hide"} ref={this.state.dropMenu}>
             <li><Link to={`/account/${this.props.id}`}>Profile</Link></li>
             <li><Link to={`/message/${this.props.id}`}>Message</Link></li>

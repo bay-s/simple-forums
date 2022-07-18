@@ -76,7 +76,6 @@ commentNotif = (ranID) => {
 createReply = () => {
     const db = collection(database,'reply');
     const user_id = this.props.id
-    console.log(user_id);
     setDoc(doc(db,user_id ),  {
          original_reply:[],
          user_reply:[],

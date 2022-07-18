@@ -122,6 +122,7 @@ class PostDetailCard extends React.Component{
 
     const postCard = Array.isArray(this.state.dataPost.docs) ? this.state.dataPost.docs.map((post,index)=> {
         const posts = post.data()
+ 
         return <PostCardDetail key={posts.post_id} data={posts} post_id={this.props.id} user_id={this.props.user_id} avatar={this.props.avatar} user_name={this.props.user_name} isLogin={this.state.isLogin}/>
         }) : ""
         return(
