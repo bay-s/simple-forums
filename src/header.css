@@ -337,6 +337,29 @@ font-size: 25px;
 
 
   /* RESPONSIVE */
+  @media (max-width:961px){
+    .navbar{
+      margin: 0 20px;
+    }
+    .menu-mid{
+      display: none;
+    }
+    
+    .header{
+      margin: 0 20px;
+    }
+    
+    .drop-list{
+      top: 68px;
+      right: -15px;
+      text-align: center;
+    }
+    .notif-list{
+      top: 80px;
+  right: 30px;
+    }
+  }
+
   @media (max-width:900px){
     .navbar{
       margin: 0 20px;
@@ -361,14 +384,14 @@ font-size: 25px;
     }
     
     .navbar{
-      margin: 0 20px;
+      margin: 0 10px;
     }
     .menu-mid{
       display: none;
     }
     
     .header{
-      margin: 0 20px;
+      margin: 0 10px;
     }
     
   }
@@ -420,7 +443,7 @@ right: 30px;
     
   }
 
-  /* 550 PX */
+/* MOBILE VIEW */
   @media (max-width:645px){
     .navbar{
       margin: 0 10px;
@@ -446,9 +469,42 @@ right: 30px;
     
   }
 
+  @media (max-width:426px){
+    .navbar{
+      margin: 0 5px;
+    }
+    .header{
+      margin: 0 5px;
+    }
+    
+    .menu-kanan{
+      gap: 20px;
+    }
+    .navbar .logo{
+      font-size: 20px;
+    }
+    .navbar a{
+      font-size: 15px;
+    }
+    
+    .menu-kanan .fa{
+      font-size: 20px;
+    }
+  
+    
+  }
+
   @media (max-width:376px){
     .header{
       margin: 0 10px;
+    }
+    .notif-list{
+      top: 80px;
+  right: 30px;
+  width: 200px;
+    }
+    .notif-list .username a{
+      font-size: 15px;
     }
     .opens{
       transform: translateY(0);
@@ -467,6 +523,28 @@ right: 30px;
     .box ul a{
       font-size: 35px;
     }
+    
+    .navbar{
+      margin: 0 1px;
+    }
+    .header{
+      margin: 0 1px;
+    }
+    
+    .menu-kanan{
+      gap: 20px;
+    }
+    .navbar .logo{
+      font-size: 16px;
+    }
+    .navbar a{
+      font-size: 14px;
+    }
+    
+    .menu-kanan .fa{
+      font-size: 17px;
+    }
+  
     
   }
 

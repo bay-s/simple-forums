@@ -83,6 +83,17 @@ return this.setState({getAvatar:this.state.getAvatar = data.images})
     })
 
     this.setState({total:this.state.total = this.props.data.total_likes})
+
+    const likes = collection(database,'post_likes')
+    const queryUser = query(likes ,where("likes_post_id","==" ,this.props.data.post_id))
+                 // GET USER LIKES
+     
+                  await getDocs(queryUser).then(res => {
+                    res.docs.map(item => {
+                      const data = item.data()
+                        this.setState({likes_id:this.state.likes_id = data.user_likes_id})
+                        });
+                      })
 }
 
 
@@ -106,18 +117,18 @@ likesNotif = (id) => {
 
 likesPost = (e) => {
   const id = this.props.data.post_id
-  const is_likes = localStorage.getItem(id)
-  const username = this.props.data.username
   const ranID = Math.random().toString(36).substring(2,36);
   const docUpdate = doc(database,'post',id ) 
   const docUpdates = doc(database,'post_likes',id) 
   if(e.target.dataset.id === id){
     if(!e.target.classList.contains('likes')){
-      updateDoc(docUpdates,{user_likes_id:arrayUnion(this.props.user_id)})
       this.likesNotif(id)
+      updateDoc(docUpdate, {
+        total_likes: this.state.total + 1
+      })
+      updateDoc(docUpdates,{user_likes_id:arrayUnion(this.props.user_id)})
       .then(() =>{
         alert("add likes sukses")
-        this.likesNotif(id)
       })
       .catch(err => {console.log(err);}) 
         }

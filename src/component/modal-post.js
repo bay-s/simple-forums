@@ -11,6 +11,8 @@ constructor(){
     super()
     this.state = {
         hide:true,
+        error:false,
+        pesan:'',
         title:'',
         posts:'',
         values:null,
@@ -73,7 +75,6 @@ ImageChange = event => {
 
 postLikes = (ranID) => {
   const db = collection(database,'post_likes');
-
   setDoc(doc(db,ranID),  {
      user_likes_id:[],
      likes_post_id:ranID
@@ -83,7 +84,6 @@ postLikes = (ranID) => {
       console.log(err);
     })
 
- 
 }
 
  uploadImage = () => {
@@ -94,10 +94,7 @@ postLikes = (ranID) => {
   const username = this.props.name
 const db = collection(database,"post")
 const docUpdate = doc(database,'user',id)
-if (this.state.title.length < 10) {
-    alert("CAPTION TOO SHORT")
-    console.log(database.ServerValue.TIMESTAMP );
-}else{
+
     const spaceRef = ref(storage, `images/${this.state.url.name}`);
     const uploadTask = uploadBytesResumable(spaceRef,this.state.url);
     uploadTask.on('state_changed', 
@@ -144,33 +141,52 @@ if (this.state.title.length < 10) {
           total_likes:0
         })
       .then(() =>{
-        alert("add post sukses")
-        this.setState({hide:this.state.hide = true})
+        this.setState({
+          pesan:"Berhasil membuat post",
+          hide:this.state.hide = true,
+          error:this.state.error = false
+        })
       })
       .catch(err => {
       alert(err.message)
+      this.setState({
+        error:this.state.error = true,
+        pesan:err.message
+      })
       })
       });
     }
   );
   
-}
+
 }
 
 Validasi = e => {
   e.preventDefault()
 
 if (this.state.title.length < 10) {
-  alert("Title atleast 10 long character ")
+  this.setState({
+    pesan:"Judul post minimal 10 karater",
+    error:this.state.error = true
+  })
 }
 else if(this.state.values === null)(
-  alert("Please select 1 Category")
+  this.setState({
+    pesan:"Pilih 1 kategori",
+    error:this.state.error = true
+  })
 )
 else if(this.state.posts.length < 50)(
-  alert("Post content atleast 50 long character")
+  this.setState({
+    pesan:"Post content minimal 50 karakter",
+    error:this.state.error = true
+  })
 )
 else if(this.state.url.length < 1){
-  alert("Post must include image")
+  this.setState({
+    pesan:"Post harus menggunakan gambar",
+    error:this.state.error = true
+  })
 }else{
 this.setState({hide:this.state.hide = false})
 this.uploadImage() 
@@ -207,6 +223,9 @@ render(){
  </div>
  <div class={this.state.progress != null ? 'progress' : 'hide'}>
   <div class="color" style={process}></div>
+</div>
+<div className={this.props.error ? 'pesan' : 'hide'}>
+<p className='error'>{this.state.pesan}</p>
 </div>
  <div className={this.state.hide ? 'button-container' : 'hide' }>
     <button className='hvr-sweep-to-right cancel' onClick={this.props.removeModal}>Cancel</button>

@@ -66,6 +66,7 @@ class MessageDetailCard extends React.Component{
 
     render(){
 
+
         const text = this.state.listMessage == null ? "" : String(this.state.listMessage.sender_text)
         const textStr = text.match(/.{1,250}/g)
         return(

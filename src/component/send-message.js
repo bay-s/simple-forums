@@ -232,6 +232,7 @@ render(){
   }
 
     return(
+<div className='message-container'>
 <div className='send-message'>
     <div className='modal-inner'>
     <div className='judul-post'>
@@ -264,6 +265,7 @@ render(){
  </div>
     </form>
     </div>
+</div>
 </div>
     )
 }

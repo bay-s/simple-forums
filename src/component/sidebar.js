@@ -41,8 +41,9 @@ return this.setState({
         }) : ""
       
       return(
-        <aside className='post-rigt'>
-        <div className='new-post'>
+        <aside className='post-right'>
+         <div className='right-menu'>
+         <div className='new-post'>
          <div className='judul-post'>
            <h3> Newest Post</h3>
          </div>
@@ -72,6 +73,7 @@ return this.setState({
         }
          </ul>
         </div>
+         </div>
      </aside>
     )
     }

@@ -80,7 +80,8 @@ async componentDidUpdate(){
 console.log(this.state.listSent.length);
     return(
       <div className='message-list-container'>
-        <div className='message-info'>
+         <div className='message-inner'>
+         <div className='message-info'>
            <ul className='info-list'>
             <li>
             <i className="fa fa-inbox" aria-hidden="true"></i>
@@ -95,6 +96,7 @@ console.log(this.state.listSent.length);
         <div className='message-list'>
            {messasgeCard }
         </div>
+         </div>
       </div>
     )
   }

@@ -32,7 +32,13 @@ if (res.docs.length < 1) {
 <div className='use-profile-container'>
     <div className='user-profile'>
         <div className='banner'>
-
+<div className='upload-photoz'>
+ <label htmlFor="upload-photo" className='upload-photos'>
+ <span>Change Banner</span>
+ <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
+ </label>
+ <input type="file" name="photos" id="upload-photo" />
+ </div>
         </div>
         {myId ?   <Navigate to="*" replace={true} /> : id === props.id ? <UserProfileCard id={id} ID={ID} isLogin={props.isLogin} /> : <UserDetailCard id={id} ID={ID} isLogin={props.isLogin} avatar={props.avatar} user_name={props.user_name} /> }
     

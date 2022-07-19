@@ -61,8 +61,8 @@ class App extends React.Component{
            await getDocs(q).then(res => {
                 res.docs.map(item => {
                 const data = item.data()
-                console.log(data);
-                const test = JSON.stringify(item.data())
+                const userData = JSON.stringify(item.data())
+                const saveDateLocal = localStorage.setItem('user',userData);
                   return this.setState({ 
                     akunUserName:this.state.akunUserName = data.username,
                     akunImages:this.state.akunImages = data.images,
@@ -76,7 +76,6 @@ class App extends React.Component{
   const db1 = collection(database,'notifikasi')
   const q2 = query(db1 ,where("notif_id","==" ,this.state.akunEmail))
 await getDocs(q2).then(res => {
-  console.log(res);
   res.docs.map(item => {
     const data = item.data()
 this.setState({notif:this.state.notif = data.notif})
@@ -174,6 +173,7 @@ setDoc(doc(user_message ,ID), {
           fullname:this.state.fullname,
           uid:user.uid,
           images:'',
+          banner:'',
           private_message:[],
           sent_message:[],
           total_following:0,
@@ -188,7 +188,6 @@ setDoc(doc(user_message ,ID), {
       this.setFollowers(ID)
       this.userNotif(ID)
       this.setPrivateMessage(ID)
-      alert("REGISTER SUKSES")
         })  
       .catch((err) => {alert(`something wrong ${err}`)})
     })
@@ -216,7 +215,7 @@ setDoc(doc(user_message ,ID), {
           const errorMsg = error.message;
           let err;
           if(errorMsg === 'auth/wrong-password'){
-            err = "Wrong Password !"
+            err = "Password salah !"
           }else{
             err = errorMsg;
           }
@@ -249,15 +248,16 @@ registerValidasi = e => {
 
 if(this.state.username.indexOf(' ') >= 0){
   alert("username cannot contain whitespace");
+this.setState({pesan:this.state.pesan = "Username tidak boleh menggunakan spasi"})
 }
 else if (this.state.username.length < 8) {
-  alert("Username atleast 8 character")
+  this.setState({pesan:this.state.pesan = "Username minimal 8 karakter"})
 }
 else if(this.state.fullname.length < 10){
-  alert("Fullname atleast 12 character")
+  this.setState({pesan:this.state.pesan = "Fullname minimal 10 karakter"})
 }
 else if(this.state.email.length < 12){
-alert("Email atleast 12 character")
+  this.setState({pesan:this.state.pesan = "Email minimal 12 karakter"})
 }
 else{
 this.registerAkun() 
