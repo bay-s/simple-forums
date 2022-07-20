@@ -1506,6 +1506,11 @@ background-image: linear-gradient(315deg, #7f5a83 0%, #0d324d 74%);
     margin:30px 200px;
   }
 
+  .not-found{
+    margin: 250px 150px;
+    align-items: center;
+    }
+
 }
 
 
@@ -1527,6 +1532,16 @@ background-image: linear-gradient(315deg, #7f5a83 0%, #0d324d 74%);
   .message-list-container{
     margin: 150px 35px;
   }
+
+  .not-found{
+    margin: 250px 100px;
+    text-align: center;
+    }
+    .not-found h1{ 
+font-size: 50px;
+
+      }
+  
 }
 
 
@@ -1587,6 +1602,21 @@ padding: 20px;
     margin: 100px 50px;
   }
   
+  .not-found{
+    margin: 250px 20px;
+    text-align: center;
+    }
+    .not-found h1{ 
+font-size: 35px;
+      }
+}
+
+@media (max-width:601px){
+  .modal-post{
+width:550px;
+margin: 10px auto;
+  }
+  
 }
 
 @media (max-width:550px){
@@ -1595,6 +1625,11 @@ padding: 20px;
   }
   .form-wrapper{
 width:100%;
+    }
+      
+  .not-found{
+    margin: 250px 10px;
+    text-align: center;
     }
 }
 
@@ -1654,6 +1689,12 @@ width:100%;
       font-size: 12px;
       white-space: nowrap;
         }
+
+        .modal-post{
+          width:400px;
+          margin: 10px auto;
+            }
+            
 }
 
 
@@ -1691,6 +1732,10 @@ flex-basis: 350px;
       white-space: nowrap;
         }
       
+        .modal-post{
+          width:350px;
+          margin: 10px auto;
+            }
 }
 
 @media (max-width:330px){
@@ -1710,4 +1755,8 @@ width: 310px;
 flex-basis: 310px;
     }
     
+    .modal-post{
+      width:300px;
+      margin: 10px auto;
+        }
 }

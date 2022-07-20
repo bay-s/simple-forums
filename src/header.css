@@ -158,7 +158,7 @@ border: 1px solid rgba(127, 90, 131, 0.23);
     flex-direction: column;
     gap: 20px;
     position: absolute;
-width: 250px;
+
 top: 80px;
 right: 70px;
     padding: 20px;
@@ -500,8 +500,7 @@ right: 30px;
     }
     .notif-list{
       top: 80px;
-  right: 30px;
-  width: 200px;
+  right: 10px;
     }
     .notif-list .username a{
       font-size: 15px;
@@ -548,8 +547,48 @@ right: 30px;
     
   }
 
-  @media (max-width:236px){
-    .header{
+  @media (max-width:321px){
+
+    .navbar{
       margin: 0 1px;
     }
+    .header{
+      margin: 0 1px;
+      gap: 50px;
     }
+    
+    .menu-kanan{
+      gap: 20px;
+    }
+    .navbar .logo{
+      font-size: 16px;
+    }
+    .navbar a{
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    
+    .menu-kanan .fa{
+      font-size: 17px;
+    }
+  
+  .create-post{
+    padding: 5px 10px;
+  }  
+
+  .notif-list{
+top: 80px;
+right: 55px;
+width: 150px;
+  }
+
+  .notif-list .username a{
+    font-size: 12px;
+    word-break: break-all !important;
+    text-align: left;
+  }
+  .notif-list .username {
+    word-break: break-all !important;
+    text-align: left;
+  }
+  }
