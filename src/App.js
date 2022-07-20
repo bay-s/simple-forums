@@ -192,8 +192,15 @@ setDoc(doc(user_message ,ID), {
       .catch((err) => {alert(`something wrong ${err}`)})
     })
         .catch((error) => {
-          const errorCode = error.code;
+          let err;
           const errorMsg = error.message;
+          if(error.code === 'auth/email-already-exists'){
+            err = "Email sudah di gunakan!";
+            this.setState({
+              pesan:this.state.pesan = err,
+              error:this.state.error = true
+            })
+          }
         });
       
       }
@@ -211,11 +218,10 @@ setDoc(doc(user_message ,ID), {
           })  
         })
         .catch((error) => {
-          const errorCode = error.code;
           const errorMsg = error.message;
           let err;
-          if(errorMsg === 'auth/wrong-password'){
-            err = "Password salah !"
+          if(error.code === 'auth/wrong-password'){
+            err = "Email atau Password salah "
           }else{
             err = errorMsg;
           }
@@ -282,19 +288,19 @@ this.akunLogin()
 <Router>
               <Header id={this.state.uid} createPost={this.createPost} logout={this.logout } isLogin={this.state.isLogin} avatar={this.state.akunImages} notif={this.state.notif}/>
     <Routes>
-          <Route path="/" element={this.state.isLogin ? <PostPage id={this.state.uid} isLogin={this.state.isLogin}/> : <Home load={this.state.load} login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} Change={this.handlerChange}/> }exact/>
+          <Route path="/" element={this.state.isLogin ? <PostPage id={this.state.uid} isLogin={this.state.isLogin}/> : <Home load={this.state.load} login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} Change={this.handlerChange} sukses={this.state.sukses}/> }exact/>
 
-          <Route path="/account/:id" element={this.state.isLogin ? <AccountPage id={this.state.uid} isLogin={this.state.isLogin} user_name={this.state.akunUserName} avatar={this.state.akunImages}/>  : <Home load={this.state.load} login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} Change={this.handlerChange}/> }/>
+          <Route path="/account/:id" element={this.state.isLogin ? <AccountPage id={this.state.uid} isLogin={this.state.isLogin} user_name={this.state.akunUserName} avatar={this.state.akunImages}/>  : <Home load={this.state.load} login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} sukses={this.state.sukses} Change={this.handlerChange}/> }/>
 
-          <Route path="/post-detail/:id" element={this.state.isLogin ? <PostDetail  ID={this.state.uid} avatar={this.state.akunImages} name={this.state.akunUserName} id={this.state.uid} isLogin={this.state.isLogin}/> : <Home load={this.state.load} login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} Change={this.handlerChange}/> }/>
+          <Route path="/post-detail/:id" element={this.state.isLogin ? <PostDetail  ID={this.state.uid} avatar={this.state.akunImages} name={this.state.akunUserName} id={this.state.uid} isLogin={this.state.isLogin}/> : <Home load={this.state.load} login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} Change={this.handlerChange} sukses={this.state.sukses}/> }/>
 
-          <Route path="/category/:id" element={this.state.isLogin ? <PostCategory ID={this.state.uid} avatar={this.state.akunImages} name={this.state.akunUserName}/>  : <Home load={this.state.load} login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} Change={this.handlerChange}/> }/>
+          <Route path="/category/:id" element={this.state.isLogin ? <PostCategory ID={this.state.uid} avatar={this.state.akunImages} name={this.state.akunUserName}/>  : <Home load={this.state.load} login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} sukses={this.state.sukses} Change={this.handlerChange}/> }/>
           
-          <Route path="/message/:id" element={this.state.isLogin ? <MessageList ID={this.state.uid} user_name={this.state.akunUserName} avatar={this.state.akunImages} /> : <Home load={this.state.load} login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} Change={this.handlerChange}/> }/>
+          <Route path="/message/:id" element={this.state.isLogin ? <MessageList ID={this.state.uid} user_name={this.state.akunUserName} avatar={this.state.akunImages} /> : <Home load={this.state.load} login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} sukses={this.state.sukses} Change={this.handlerChange}/> }/>
           
-          <Route path="/send-message/:id" element={this.state.isLogin ? <SendMessage ID={this.state.uid} user_name={this.state.akunUserName} avatar={this.state.akunImages} /> : <Home load={this.state.load} login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} Change={this.handlerChange}/> }/>
+          <Route path="/send-message/:id" element={this.state.isLogin ? <SendMessage ID={this.state.uid} user_name={this.state.akunUserName} avatar={this.state.akunImages} /> : <Home load={this.state.load} login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi}sukses={this.state.sukses} Change={this.handlerChange}/> }/>
 
-          <Route path="/message-detail/:id" element={this.state.isLogin ? <MessageDetail ID={this.state.uid} user_name={this.state.akunUserName} avatar={this.state.akunImages} /> : <Home load={this.state.load} login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} Change={this.handlerChange}/> }/>
+          <Route path="/message-detail/:id" element={this.state.isLogin ? <MessageDetail ID={this.state.uid} user_name={this.state.akunUserName} avatar={this.state.akunImages} /> : <Home load={this.state.load} login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} sukses={this.state.sukses} Change={this.handlerChange}/> }/>
 
           <Route path='*' element={<NotFound />} />
 

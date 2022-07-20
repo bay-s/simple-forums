@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useParams ,useNavigate, Navigate} from 'react-router-dom'
 import akun from '../akun.jpg'
-import {database,auth} from '../firebase';
+import {database,auth,storage} from '../firebase';
 import { getAuth, deleteUser } from "firebase/auth";
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage"
 import { collection, getDocs,query, where,doc, deleteDoc,getDocFromCache} from 'firebase/firestore';
 import EditProfile from './edit-profile';
 import UserDetailCard from './user-detail';
@@ -13,31 +14,106 @@ import FollowingCard from './following-card';
 
 function AccountPage(props){
     const [myId, setMyid]  = useState(false)
+    const [banner,setBanner] = useState({
+     data:{
+      url:'',
+      bannerImages:''
+     }
+    })
     const {id} = useParams()
     const ID = props.id
     const db = collection(database,"user")
     const q = query(db,where("uid","==" ,id))
+let url;
+let images;
+   const  changeBanner = (event) => {
+      console.log(event.target.files);
+      if (event.target.files && event.target.files[0]) {
+        let img = event.target.files[0];
+        console.log(img);
+        setBanner({...setBanner,
+       data:{
+        url:img,
+        bannerImages:img
+       }
+        })
+
+        console.log(banner);
+        console.log(banner.data.bannerImages);
+      }
+    }
+    useEffect(() => {
+      // action on update of movies
+  }, [movies]);
+  
+ const uploadImage = () => {
+  const docUpdate = doc(database,'user',ID)
+    const spaceRef = ref(storage, `images/${this.state.url.name}`);
+    const uploadTask = uploadBytesResumable(spaceRef,this.state.url);
+    uploadTask.on('state_changed', 
+    (snapshot) => {
+      // Observe state change events such as progress, pause, and resume
+      // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      console.log('Upload is ' + progress + '% done');
+      this.setState({progress:this.state.progress = progress})
+      switch (snapshot.state) {
+        case 'paused':
+          console.log('Upload is paused');
+          break;
+        case 'running':
+          console.log('Upload is running');
+          break;
+      }
+    }, 
+    (error) => {
+      // Handle unsuccessful uploads
+    alert(error.message)
+    }, 
+    () => {
+      // Handle successful uploads on complete
+      // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+        console.log('File available at', downloadURL);
+        // this.setState({saveImage:!this.state.saveImage,});
+        this.postLikes(ranID);
+        updateDoc(docUpdate,{
+          total_post:total_post + 1
+        })
+        .then(() =>{alert("Change banner sukses")})
+        .catch(err => {alert(`Something wrong ${err.message}`)})
+      });
+    }
+  );
+  
+
+}  
     // GET USER LOGIN
  getDocs(q).then(res => {
 if (res.docs.length < 1) {
   setMyid(true);
 }
-      res.docs.map(item => {
-      const data = item.data()
-      console.log(data);
-        });
-      })
-      console.log(myId);
+})
+
+const bannerBg = {
+  background:`url(${banner.bannerImages})`
+}
     return(
 <div className='use-profile-container'>
     <div className='user-profile'>
-        <div className='banner'>
+        <div className='banner' >
 <div className='upload-photoz'>
- <label htmlFor="upload-photo" className='upload-photos'>
+<form className='form'>
+<label htmlFor="upload-photo" className='upload-photos'>
  <span>Change Banner</span>
  <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
  </label>
- <input type="file" name="photos" id="upload-photo" />
+ <input type="file" name="photos" id="upload-photo"  onChange={changeBanner}/>
+ {/* <div className={this.state.hide ? 'button-container' : 'hide' }>
+    <button className='hvr-sweep-to-right cancel' onClick={this.props.removeModal}>Cancel</button>
+    <button className='hvr-sweep-to-right save'>Save</button>
+ </div> */}
+</form>
  </div>
         </div>
         {myId ?   <Navigate to="*" replace={true} /> : id === props.id ? <UserProfileCard id={id} ID={ID} isLogin={props.isLogin} /> : <UserDetailCard id={id} ID={ID} isLogin={props.isLogin} avatar={props.avatar} user_name={props.user_name} /> }

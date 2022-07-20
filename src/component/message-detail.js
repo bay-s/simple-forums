@@ -22,7 +22,8 @@ class MessageDetailCard extends React.Component{
         this.state = {
            hide:true,
            listMessage:[],
-           uid:''
+           uid:'',
+           loading:true
         }
     }
 
@@ -34,8 +35,13 @@ class MessageDetailCard extends React.Component{
                 // GET SENDER MESSAGE
                 await getDocs(qMsg ).then((res) => {
                   res.docs.map((item) => {
-                    const data = item.data();
-                    this.setState({listMessage:data})
+                     if(res){
+                      const data = item.data();
+                      this.setState({
+                        listMessage:data,
+                        loading:this.state.loading = false
+                      })
+                     }
                   });
                 });
       }
@@ -49,7 +55,13 @@ class MessageDetailCard extends React.Component{
                 await getDocs(qMsg ).then((res) => {
                   res.docs.map((item) => {
                     const data = item.data();
-                    this.setState({listMessage:data})
+                    if(res){
+                      const data = item.data();
+                      this.setState({
+                        listMessage:data,
+                        loading:this.state.loading = false
+                      })
+                     }
                   });
                 });
       }
@@ -71,7 +83,16 @@ class MessageDetailCard extends React.Component{
         const textStr = text.match(/.{1,250}/g)
         return(
             <div className='message-list-container'>
-               <div className='message-detail'>
+             {this.state.loading ? <div className="skeleton-card">
+            <div className="card-img skeleton">
+            </div>
+            <div className="card-body">
+                <h2 className="card-title skeleton">
+                </h2>
+                <p className="card-intro skeleton">   
+                </p>
+            </div>
+        </div> : <div className='message-detail'>
                   <header className='message-header'>
                       <div className='post-info'>
                       <Link to={`/account/${this.state.listMessage.sender_id}`}><img src={this.state.listMessage.sender_avatar != null ? this.state.listMessage.sender_avatar : img} className='avatar' /></Link>
@@ -99,7 +120,7 @@ return <p className='post-text'>{texts}</p>
             <div className={this.state.hide ? 'hide' : 'reps'}>
           <ReplyForm id={this.props.id} ID={this.props.ID} uid={this.state.listMessage.sender_id} user_name={this.props.user_name} avatar={this.props.avatar} />
              </div>
-               </div>{/* END MESSAGE DETAIL  */}
+               </div>}
             </div>
         )
     }
@@ -108,8 +129,3 @@ return <p className='post-text'>{texts}</p>
 
 
 
-{/* <div className='post-artikel'>
-{post_content.map(text => {
-return <p className='post-text'>{text}</p>
-}) }
-</div> */}

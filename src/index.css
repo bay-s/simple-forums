@@ -1563,7 +1563,6 @@ font-size: 50px;
 
   .post-right{
  grid-area: rights;
-    border: 2px solid red;
   }
 
   .message-container{
@@ -1665,6 +1664,11 @@ white-space: nowrap;
 .user-name .text{
   font-size: 18px;
 }
+
+.home-container{
+  margin: 100px 10px;
+}
+
 }
 
 
