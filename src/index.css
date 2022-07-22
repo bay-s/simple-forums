@@ -182,6 +182,26 @@ button {
   color: var(--lightGreen);
 }
 
+.disabled{
+  border: 1px solid var(--notActive);
+  color: var(--notActive);
+  cursor: wait
+}
+
+.cancels{
+  padding: 0.73em 1.87em;
+  border-radius: 5px;
+  background: transparent;
+  border-radius: 5px;
+  border-color: transparent;
+  display: block;
+  color: var(--lightGreen);
+  margin: 0 auto;
+  cursor: pointer;
+  font-size: 0.85em;
+  border: 1px solid var(--lightGreen);
+  color: var(--lightGreen);
+}
 @import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&family=Noto+Sans:wght@500&family=Outfit:wght@300&family=Pacifico&family=Poppins:wght@200&display=swap");
 /* END RESET */
 
@@ -627,9 +647,11 @@ select:focus{
 
 .banner{
   width: 100%;
-  height: 350px;
-  background: url(./background.jpg);
+  height: 400px;
   position: relative;
+  background-position:center center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .banner .upload-photoz{

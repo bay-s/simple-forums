@@ -62,8 +62,8 @@ constructor(){
  }
   render(){
 
-
-     const notif_list = this.props.notif.length < 1 ? console.log("kosong") : this.props.notif.map((m,i)=> {
+console.log(     this.props.avatar === '' );
+     const notif_list = this.props.notif == null ? console.log("kosong") : this.props.notif.map((m,i)=> {
       return <NotifCard  data={m} key={i}/>
      }) 
     return(
@@ -76,13 +76,13 @@ constructor(){
         </ul>
         <ul class={this.props.isLogin ? "menu-kanan" : "hide"}>
           <li className='create-post'><a href="#0" onClick={this.props.createPost}>Create Post</a></li>
-          <li><i className={this.props.isLogin ? "fa fa-bell notif" : "hide"} aria-hidden="true" onClick={this.openNotif}> <span className={this.props.notif.length < 1  ? "hide" : "notif-number"}>{this.props.notif.length < 1 ? "" : this.props.notif.length}</span></i>
-          <div className={this.props.notif.length < 1 ? "hide" : "notif-list"} ref={this.state.notifList}>
+          <li><i className={this.props.isLogin ? "fa fa-bell notif" : "hide"} aria-hidden="true" onClick={this.openNotif}> <span className={this.props.notif == null ? "hide" : "notif-number"}>{this.props.notif == null ? "" : this.props.notif.length}</span></i>
+          <div className={this.props.notif == null ? "hide" : "notif-list"} ref={this.state.notifList}>
           {notif_list }
           </div>
           </li>
           <li className="drop-down">
-           <img src={this.props.avatar != null ? this.props.avatar : user} onClick={this.dropDown}/>
+           <img src={this.props.avatar === '' ? user : this.props.avatar} onClick={this.dropDown}/>
            <ul className={this.props.isLogin ? "drop-list" : "hide"} ref={this.state.dropMenu}>
             <li><Link to={`/account/${this.props.id}`}>Profile</Link></li>
             <li><Link to={`/message/${this.props.id}`}>Message</Link></li>

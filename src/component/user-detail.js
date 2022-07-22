@@ -248,7 +248,6 @@ class UserDetailCard extends React.Component {
           return <UserPost data={posts} />;
         })
       : "";
-
     const buttonFollow =
       this.state.follower_id.length < 1 ? (
         <button
@@ -259,7 +258,7 @@ class UserDetailCard extends React.Component {
           Follow
         </button>
       ) : (
-        this.state.follower_id.map((id) => {
+        this.state.follower_id.map((id,index) => {
           if (id === this.props.ID) {
             return (
               <button
@@ -271,7 +270,7 @@ class UserDetailCard extends React.Component {
               </button>
             );
           } else {
-  
+
           }
         })
       );

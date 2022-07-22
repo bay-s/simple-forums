@@ -8,11 +8,6 @@ class Home extends React.Component{
         }
     }
 
-    componentDidMount(){
-        if(this.props.sukses){
-            this.setState({ index:0});
-        }
-    }
     nextSlide = (e) => {
         e.preventDefault();
         this.setState({ index: (this.state.index = this.state.index + 1) });
@@ -82,7 +77,15 @@ testSubmit = e => {
                         Password
                      <input type='password' name='password' onChange={this.props.Change}/>
                      </label>
-                    {this.props.load ? <button className='hvr-sweep-to-right'  disabled>Register</button> : <button type='submit' className='hvr-sweep-to-right'>Register</button>}
+               <label>
+               {this.props.load ?  <button type='submit' className='hvr-sweep-to-right'>Register</button> : <button className='disabled'  disabled>Register</button> }
+               </label>
+                <div className={this.props.error ? 'pesan' : 'hide'}>
+                    <p className='error'>{this.props.pesan}</p>
+                </div>
+                <div className={this.props.sukses ? 'pesan' : 'hide'}>
+                    <p className='sukses'>{this.props.pesan}</p>
+                </div>
                         </form>
                     </div>
                 </div>

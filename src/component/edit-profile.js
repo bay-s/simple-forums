@@ -31,7 +31,6 @@ async componentDidMount(){
 ImageChange = event => {
   if (event.target.files && event.target.files[0]) {
     let img = event.target.files[0];
-
     this.setState({
       avatar: this.state.avatar = URL.createObjectURL(img),
       url:this.state.url = img

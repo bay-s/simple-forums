@@ -27,13 +27,14 @@ class App extends React.Component{
     constructor(){
         super()
         this.state = {
-        load:false,
+        load:true,
         password:'',
         email:'',
         fullname:'',
         username:'',
         error:false,
-        pesan:'sssssss',
+        pesan:'',
+        pesanSukses:'',
         sukses:false,
         disable:false,
         isLogin:false,
@@ -58,11 +59,13 @@ class App extends React.Component{
               const uid = user.uid;
               const q = query(db,where("uid","==" , uid))
               // GET USER LOGIN
+              const users = {
+                bool:true
+              }
            await getDocs(q).then(res => {
                 res.docs.map(item => {
                 const data = item.data()
-                const userData = JSON.stringify(item.data())
-                const saveDateLocal = localStorage.setItem('user',userData);
+             
                   return this.setState({ 
                     akunUserName:this.state.akunUserName = data.username,
                     akunImages:this.state.akunImages = data.images,
@@ -144,8 +147,44 @@ setDoc(doc(user_followers ,ID), {
   .catch((err) => {alert(`something wrong ${err}`)})
  }
 
+ createAkun = (ID) => {
+  const db = collection(database,'user')    
+  setDoc(doc(db,ID), {
+      username: this.state.username,
+      email:this.state.email,
+      fullname:this.state.fullname,
+      uid:ID,
+      images:'',
+      banner:'',
+      private_message:[],
+      sent_message:[],
+      total_following:0,
+      total_follower:0,
+      total_post:0,
+    })
+    .then(() => {
+      this.setState({
+        pesan:this.state.pesan = "Register sukses",
+        sukses:this.state.sukses = true,
+        error:this.state.error = false,
+        load:this.state.load = true
+      })
+  this.setFollowers(ID)
+  this.userNotif(ID)
+    })  
+  .catch((err) => {
+    alert(`something wrong ${err}`)
+    this.setState({
+      pesan:this.state.pesan =`something wrong ${err}`,
+      error:this.state.error = true,
+      load:this.state.load = true,
+      sukses:this.state.sukses = false
+    })
+    
+  })
+ }
+
  setPrivateMessage = (ID) => {
-  console.log(ID);
   const user_message = collection(database,'private_message')
 setDoc(doc(user_message ,ID), {
   message:[],
@@ -155,52 +194,33 @@ setDoc(doc(user_message ,ID), {
   .then(() => {console.log('sukses')})  
   .catch((err) => {alert(`something wrong ${err}`)})
  }
+
   registerAkun = (e) => {
-    this.setState({load:this.state.load = true})  
+    this.setState({load:this.state.load = false})  
         createUserWithEmailAndPassword(secondAuth ,this.state.email,this.state.password)
         .then((userCredential) => {
           // Signed in 
           const user = userCredential.user;
           const ID = user.uid
-          this.setState({
-            errorMessage:"Register sukses",
-            sukses:true
-          })
-      const db = collection(database,'user')    
-      setDoc(doc(db,user.uid), {
-          username: this.state.username,
-          email:this.state.email,
-          fullname:this.state.fullname,
-          uid:user.uid,
-          images:'',
-          banner:'',
-          private_message:[],
-          sent_message:[],
-          total_following:0,
-          total_follower:0,
-          total_post:0,
-        })
-        .then(() => {
-        this.setState({
-      errorMessage:"Register sukses",
-       load:this.state.load = false
-      })
-      this.setFollowers(ID)
-      this.userNotif(ID)
-      this.setPrivateMessage(ID)
-        })  
-      .catch((err) => {alert(`something wrong ${err}`)})
-    })
-        .catch((error) => {
-          let err;
-          const errorMsg = error.message;
-          if(error.code === 'auth/email-already-exists'){
-            err = "Email sudah di gunakan!";
+          if(userCredential){
+            this.createAkun(ID) 
             this.setState({
-              pesan:this.state.pesan = err,
-              error:this.state.error = true
+              pesan:this.state.pesan = "Register sukses",
+              sukses:this.state.sukses = true,
+              error:this.state.error = false,
+              load:this.state.load = true
             })
           }
+
+    })
+        .catch((error) => {
+          const err= error.message;
+          this.setState({
+            pesan:this.state.pesan = err,
+            error:this.state.error = true,
+            load:this.state.load = true,
+            sukses:this.state.sukses = false
+          })
         });
       
       }
@@ -253,20 +273,38 @@ registerValidasi = e => {
   e.preventDefault()
 
 if(this.state.username.indexOf(' ') >= 0){
-  alert("username cannot contain whitespace");
-this.setState({pesan:this.state.pesan = "Username tidak boleh menggunakan spasi"})
+this.setState({
+  pesan:this.state.pesan = "Username tidak boleh menggunakan spasi",
+  error:this.state.error = true
+})
 }
 else if (this.state.username.length < 8) {
-  this.setState({pesan:this.state.pesan = "Username minimal 8 karakter"})
+  this.setState({
+    pesan:this.state.pesan = "Username minimal 8 karakter",
+    error:this.state.error = true
+  })
 }
 else if(this.state.fullname.length < 10){
-  this.setState({pesan:this.state.pesan = "Fullname minimal 10 karakter"})
+  this.setState({
+    pesan:this.state.pesan = "Fullname minimal 10 karakter",
+    error:this.state.error = true
+})
 }
 else if(this.state.email.length < 12){
-  this.setState({pesan:this.state.pesan = "Email minimal 12 karakter"})
+  this.setState({
+    pesan:this.state.pesan = "Email minimal 12 karakter",
+    error:this.state.error = true
+})
+}
+else if(this.state.password.length < 8){
+  this.setState({
+    pesan:this.state.pesan = "Password minimal 8 karakter",
+    error:this.state.error = true
+})
 }
 else{
 this.registerAkun() 
+this.setState({load:this.state.load = false})
 console.log("tes");
 }
 }
@@ -274,9 +312,15 @@ console.log("tes");
 loginValidasi = (e) => {
 e.preventDefault()
 if(this.state.email.length < 1){
-  alert("Username cant be empty")
+  this.setState({
+    pesan:this.state.pesan = "username tidak boleh kosong",
+    error:this.state.error = true
+})
 }else if(this.state.password < 1){
-  alert("Password cant be empty")
+  this.setState({
+    pesan:this.state.pesan = "Password tidak boleh kosong",
+    error:this.state.error = true
+})
 }else{
 this.akunLogin() 
 }
@@ -298,7 +342,7 @@ this.akunLogin()
           
           <Route path="/message/:id" element={this.state.isLogin ? <MessageList ID={this.state.uid} user_name={this.state.akunUserName} avatar={this.state.akunImages} /> : <Home load={this.state.load} login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} sukses={this.state.sukses} Change={this.handlerChange}/> }/>
           
-          <Route path="/send-message/:id" element={this.state.isLogin ? <SendMessage ID={this.state.uid} user_name={this.state.akunUserName} avatar={this.state.akunImages} /> : <Home load={this.state.load} login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi}sukses={this.state.sukses} Change={this.handlerChange}/> }/>
+          <Route path="/send-message/:id" element={this.state.isLogin ? <SendMessage ID={this.state.uid} user_name={this.state.akunUserName} avatar={this.state.akunImages} /> : <Home load={this.state.load} login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} sukses={this.state.sukses} Change={this.handlerChange}/> }/>
 
           <Route path="/message-detail/:id" element={this.state.isLogin ? <MessageDetail ID={this.state.uid} user_name={this.state.akunUserName} avatar={this.state.akunImages} /> : <Home load={this.state.load} login={this.loginValidasi } avatar={this.state.akunImages} Post={this.state.totalPost} error={this.state.error} pesan={this.state.pesan} registerAkun={this.registerValidasi} sukses={this.state.sukses} Change={this.handlerChange}/> }/>
 
