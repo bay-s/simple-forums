@@ -165,7 +165,7 @@ const likes_id = this.state.likes_id.length < 1 ? <i className="fa fa-heart"  da
         <div class="post-card">
 <div className='post-info'>
 <div className='post-info-inner'>
-<img src={this.state.getAvatar  != null ? this.state.getAvatar : img} />
+<img src={this.state.getAvatar.length < 1 ? img : this.state.getAvatar} />
 <div className='post-user'>
     <h4 className='username'><Link to={`/account/${this.props.data.user_post_id}`}>{this.props.data.username}</Link></h4>
     <span className='date'>{date}</span>

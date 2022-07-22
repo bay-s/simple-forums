@@ -120,23 +120,30 @@ this.uploadImage()
   });
  }
     render(){
-        const bannerBG = {
-           backgroundImage:`url(${this.state.images})`
-        }
-        const normal = {
-          backgroundImage:`url(${background})`
-        }
+
+      let banner;
         const process = {
           width:`${this.state.status}%`
         }
-        const banner = {
-          backgroundImage:`url(${this.state.banner})`
-        }
-        console.log(this.state.banner);
+    if(this.state.banner.length > 0){
+      banner =  {
+        backgroundImage:`url(${this.state.banner})`
+      }
+      console.log("test");
+    }else if(this.state.images.length > 1){
+      banner = {
+        backgroundImage:`url(${this.state.images})`
+      }
+    }else{
+banner =  {
+  backgroundImage:`url(${background})`
+}
+    }
+        // style={this.state.banner.length > 0 ? banner :
+        //   this.state.images.length > 0 ? bannerBG : normal
+        //  }
         return(
-            <div className='banner' style={this.state.banner.length > 0 ? banner :
-             this.state.images.length > 0 ? bannerBG : normal
-            }>
+            <div className='banner' style={banner}>
             <div className='upload-photoz'>
             <form className='form' onSubmit={this.uploadBanner}>
             <label htmlFor="upload-photo" className='upload-photos'>

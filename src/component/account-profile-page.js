@@ -10,6 +10,7 @@ import UserPost from './user-post';
 import FollowerCard from './follower-card';
 import FollowingCard from './following-card';
 import Banner from './banner';
+import BannerUser from './banner-user';
 
 
 function AccountPage(props){
@@ -30,9 +31,8 @@ if (res.docs.length < 1) {
     return(
 <div className='use-profile-container'>
   <div className='user-profile'>
-<Banner ID={ID}/>
-
-        {myId ?   <Navigate to="*" replace={true} /> : id === props.id ? <UserProfileCard id={id} ID={ID} isLogin={props.isLogin} /> : <UserDetailCard id={id} ID={ID} isLogin={props.isLogin} avatar={props.avatar} user_name={props.user_name} /> }
+{id === ID ? <Banner ID={ID}/> : <BannerUser id={id}/> }
+        {myId ?  <Navigate to="*" replace={true} /> : id === props.id ? <UserProfileCard id={id} ID={ID} isLogin={props.isLogin} /> : <UserDetailCard id={id} ID={ID} isLogin={props.isLogin} avatar={props.avatar} user_name={props.user_name} /> }
     
     </div>
     {/* END USER PROFILE */}
