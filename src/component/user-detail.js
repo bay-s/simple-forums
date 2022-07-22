@@ -248,32 +248,67 @@ class UserDetailCard extends React.Component {
           return <UserPost data={posts} />;
         })
       : "";
-    const buttonFollow =
-      this.state.follower_id.length < 1 ? (
-        <button
+
+let test ;
+        if(this.state.follower_id.length < 1){
+          test = <button
           className="hvr-sweep-to-right"
           data-follow={this.props.id}
           onClick={this.follow}
         >
           Follow
         </button>
-      ) : (
-        this.state.follower_id.map((id,index) => {
-          if (id === this.props.ID) {
-            return (
-              <button
-                className="hvr-sweep-to-right following"
-                data-follow={this.props.id}
-                onClick={this.follow}
-              >
-                Following
-              </button>
-            );
-          } else {
+        }else{
+          this.state.follower_id.map((id) => {
+            if (id === this.props.ID) {
+              return test = (
+                <button
+                  className="hvr-sweep-to-right following"
+                  data-follow={this.props.id}
+                  onClick={this.follow}
+                >
+                  Following
+                </button>
+              );
+            } else {
+  return  test = <button
+  className="hvr-sweep-to-right"
+  data-follow={this.props.id}
+  onClick={this.follow}
+>
+  Follow
+</button>
+            }
+          })
+        }
 
-          }
-        })
-      );
+    // const buttonFollow =
+    //   this.state.follower_id.length < 1 ? 
+    //     <button
+    //       className="hvr-sweep-to-right"
+    //       data-follow={this.props.id}
+    //       onClick={this.follow}
+    //     >
+    //       Follow
+    //     </button>
+        
+    //   : 
+    //     this.state.follower_id.map((id) => {
+    //       if (id === this.props.ID) {
+    //         return (
+    //           <button
+    //             className="hvr-sweep-to-right following"
+    //             data-follow={this.props.id}
+    //             onClick={this.follow}
+    //           >
+    //             Following
+    //           </button>
+    //         );
+    //       } else {
+
+    //       }
+    //     })
+
 
       const followCard = this.state.follower != null ? this.state.follower.map(data => {
         return <FollowerCard follow_id={data} user_id={this.props.id }/>
@@ -301,7 +336,7 @@ class UserDetailCard extends React.Component {
               </div>
             </div>
             <div className="user-edit">
-            {buttonFollow}
+            {test }
 
             <Link to={`/send-message/${this.props.id}`}>
             <button className="hvr-sweep-to-right"> Send Message</button>

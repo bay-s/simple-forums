@@ -102,7 +102,6 @@ this.setState({notif:this.state.notif = data.notif})
         
         handlerChange = (e) => {
           const {name,value} = e.target
-          console.log(value);
           this.setState(prev => {
             return{
          [name]:value
@@ -136,7 +135,6 @@ setDoc(doc(notif,ID), {
   }
 
  setFollowers = (ID) => {
-  console.log(ID);
   const user_followers = collection(database,'user_follower')
 setDoc(doc(user_followers ,ID), {
   follower:[],
@@ -255,7 +253,6 @@ setDoc(doc(user_message ,ID), {
 createPost = (e) => {
   e.preventDefault()
   this.setState({modal:!this.state.modal})
-  console.log(this.state.modal);
 }
           
 removeModal = (e) =>{
@@ -305,7 +302,6 @@ else if(this.state.password.length < 8){
 else{
 this.registerAkun() 
 this.setState({load:this.state.load = false})
-console.log("tes");
 }
 }
 

@@ -62,7 +62,6 @@ constructor(){
  }
   render(){
 
-console.log(     this.props.avatar === '' );
      const notif_list = this.props.notif == null ? console.log("kosong") : this.props.notif.map((m,i)=> {
       return <NotifCard  data={m} key={i}/>
      }) 
